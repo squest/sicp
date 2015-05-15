@@ -1,0 +1,20 @@
+#lang racket
+
+(define (sum-sieve lim)
+  (let ((refs (make-vector (+ lim 1) true))
+        (llim (sqrt lim)))
+    (define (loopj j step)
+      (if (<= j lim)
+          (begin (vector-set! refs j false)
+                 (loopj (+ j step) step))
+          false))
+    (define (loop i res)
+      (if (> i lim)
+          res 
+          (if (vector-ref refs i)
+              (if (<= i llim)
+                  (begin (loopj (* i i) (+ i i))
+                         (loop (+ i 2) (+ i res)))
+                  (loop (+ i 2) (+ i res)))
+              (loop (+ i 2) res))))
+    (loop 3 2)))
