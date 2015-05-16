@@ -144,9 +144,41 @@
     [(= (* i i) n) (sort (cons i res) <)]
     [(= 0 (remainder n i)) 
      (divisors n (+ i 1) (cons i (cons (quotient n i) res)))]
-    [true (divisors n (+ i 1) res)]))
+    [else (divisors n (+ i 1) res)]))
+
+(define/match (prime? p (i 3))
+  [((? (lambda (x) (< x 2))) _) false]
+  [(2 _) true]
+  [((? even?) _) false]
+  [(p i) (cond 
+           [(> (* i i) p) true]
+           [(= 0 (remainder p i)) false]
+           [else (prime? p (+ i 2))])])
+
+(define (odd-prime? p (i 3))
+  (cond 
+    [(> (* i i) p) true]
+    [(= 0 (remainder p i)) false]
+    [else (odd-prime? p (+ i 2))]))
+
+(define/match (modex a m modi)
+  [(_ 0 _) 1]
+  [(_ 1 _) (remainder a modi)]
+  [(a m modi) 
+   (let [(half (modex a (quotient m 2) modi))]
+     (if (even? m) 
+         (remainder (* half half) modi)
+         (remainder (* a half half) modi)))])
+
+(define/match (reduce f xs (acc null))
+  [(_ (? empty?) _) acc]
+  [(_ (list-rest a b) (? null?)) (reduce f b a)]
+  [(_ (list-rest a b) acc) (reduce f b (f acc a))])
 
 
+
+
+  
 
 
 
