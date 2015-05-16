@@ -112,8 +112,63 @@
 (define/match (fibolist-pat i (a 2) (b 1) (res '(1)))
   [(1 _ _ res) (reverse res)]
   [(i a b res) (fibolist-pat (- i 1) (+ a b) a (cons a res))])
-  
-  
+
+(define/match (fast-expt a m)
+  [(_ 0) 1]
+  [(a 1) a]
+  [(a m) (let [(half (fast-expt a (quotient m 2)))]
+           (if (even? m)
+               (* half half)
+               (* a half half)))])
+
+(define/match (expt-1 a m (res 1))
+  [(_ 0 res) res]
+  [(a m res) (expt-1 a (- m 1) (* a res))])
+
+(define/match (gcd-1 a b)
+  [(0 b) b]
+  [(a 0) a]
+  [(1 b) 1]
+  [(a 1) 1]
+  [(a b) (if (> a b) 
+             (gcd-1 (remainder a b) b) 
+             (gcd-1 (remainder b a) a))])
+
+(define (split xs)
+  (let [(count (length xs))]
+    (list (take xs count) (drop xs count))))
+
+(define (divisors n (i 2) (res (list 1 n)))
+  (cond 
+    [(> (* i i) n) (sort res <)]
+    [(= (* i i) n) (sort (cons i res) <)]
+    [(= 0 (remainder n i)) 
+     (divisors n (+ i 1) (cons i (cons (quotient n i) res)))]
+    [true (divisors n (+ i 1) res)]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
