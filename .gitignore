@@ -2,3 +2,4 @@
 *.iml
 *.xml
 /cljsicp/.idea
+workspace.xml

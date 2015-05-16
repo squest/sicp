@@ -69,11 +69,60 @@
 
 ;; coins summation
 
-(define coins '(1 5 10 25 50))
+(define coins '(1 2 5 10 20 50 100 200))
 
 (define (nth xs idx)
   "Take the idx-th element of xs"
   (if (= idx 0) (first xs) (nth (rest xs) (- idx 1))))
+
+(define (sum-coins amount (coin 7))
+  (match* (amount coin)
+    [(0 _) 1]
+    [((? negative?) _) 0]
+    [(_ 0) 1]
+    [(amount coin) 
+     (let ((coin-value (nth coins coin)))
+       (foldl + 0 (map (lambda (x)
+                         (sum-coins 
+                          (- amount (* coin-value x))
+                          (- coin 1)))
+                       (range (+ 1 (quotient amount coin-value))))))]))
+
+(define/match (faktorial n (res 1))
+  ((0 _) res)
+  ((1 _) res)
+  ((n res) (faktorial (- n 1) (* res n))))
+
+(define/match (coin-sums amount (coin 7))
+  [(0 _) 1]
+  [((? negative?) _) 0]
+  [(_ 0) 1]
+  [(amount coin)
+   (let [(cvalue (nth coins coin))]
+     (foldl + 0 (map (lambda (x)
+                       (coin-sums 
+                        (- amount (* cvalue x))
+                        (- coin 1)))
+                     (range (+ 1 (quotient amount cvalue))))))])
+
+(define/match (fibo-pat i (a 1) (b 0))
+  [(1 _ _) a]
+  [(i a b) (fibo-pat (- i 1) (+ a b) a)])
+
+(define/match (fibolist-pat i (a 2) (b 1) (res '(1)))
+  [(1 _ _ res) (reverse res)]
+  [(i a b res) (fibolist-pat (- i 1) (+ a b) a (cons a res))])
+  
+  
+
+
+
+
+
+
+
+
+
 
 
 
