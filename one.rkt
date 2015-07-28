@@ -19,6 +19,30 @@
               (loop (+ i 2) res))))
     (loop 3 2)))
 
+(define (sum-sieve2 lim)
+  (let* ((refs (make-vector (+ lim 1) true))
+         (llim (integer-sqrt lim))
+         (hlim (if (even? llim) (+ llim 1) (+ llim 2))))
+    (define (outer i res)
+      (define (inner j)
+        (when (<= j lim)
+          (vector-set! refs j false)
+          (inner (+ j i i))))
+      (if (<= i llim)
+          (if (vector-ref refs i)
+              (begin (inner (* i i))
+                     (outer (+ i 2) (+ i res)))
+              (outer (+ i 2) res))
+          res))
+    (define (finder i res)
+      (if (> i lim)
+          res
+          (if (vector-ref refs i)
+              (finder (+ i 2) (+ i res))
+              (finder (+ i 2) res))))
+    (finder hlim (outer 3 2))))
+
+
 (define (my-sqrt n)
   (define (improve-guess guess)
     (/ (+ guess (/ n guess)) 2.0))
@@ -178,7 +202,8 @@
 
 
 
-  
+
+
 
 
 
