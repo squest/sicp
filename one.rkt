@@ -212,6 +212,7 @@
             (ltake (- n 1) ((cdr xs))))))
 
 (define (inc i) (+ i 1))
+(define (sqr i) (* i i))
 
 (define (ldrop n xs)
   (if (zero? n)
@@ -224,11 +225,14 @@
 (define (lrange i (step 1))
   (lcons i (lrange (+ i step) step)))
 
+(define (lmap f rst)
+  (lcons (f (car rst))
+         (lmap f ((cdr rst)))))
+
 (define pascal
-  (iterate (lambda (x)
-             (let ((tmp (cons 0 x)))
-               (map + tmp (reverse tmp))))
-           (list 1)))
+  (iterate (fn (x) (let ((tmp (cons 0 x)))(map + tmp (reverse tmp)))) (list 1)))
+
+
 
 
 
