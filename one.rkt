@@ -199,6 +199,37 @@
   [(_ (list-rest a b) (? null?)) (reduce f b a)]
   [(_ (list-rest a b) acc) (reduce f b (f acc a))])
 
+(define-syntax-rule (lcons i rst)
+  (cons i (lambda () rst)))
+
+(define-syntax-rule (fn binding body)
+  (lambda binding body))
+
+(define (ltake n xs)
+  (if (zero? n)
+      '()
+      (cons (car xs)
+            (ltake (- n 1) ((cdr xs))))))
+
+(define (inc i) (+ i 1))
+
+(define (ldrop n xs)
+  (if (zero? n)
+      xs
+      (ldrop (- n 1) ((cdr xs)))))
+
+(define (iterate f i)
+  (lcons i (iterate f (f i))))
+
+(define (lrange i (step 1))
+  (lcons i (lrange (+ i step) step)))
+
+(define pascal
+  (iterate (lambda (x)
+             (let ((tmp (cons 0 x)))
+               (map + tmp (reverse tmp))))
+           (list 1)))
+
 
 
 
