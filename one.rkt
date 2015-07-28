@@ -230,7 +230,9 @@
          (lmap f ((cdr rst)))))
 
 (define pascal
-  (iterate (fn (x) (let ((tmp (cons 0 x)))(map + tmp (reverse tmp)))) (list 1)))
+  (iterate (fn (x) (let [(tmp (cons 0 x))]
+                     (map + tmp (reverse tmp))))
+           (list 1)))
 
 
 
